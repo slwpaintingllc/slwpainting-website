@@ -1,7 +1,3 @@
 [build]
   command = "npm run build"
   publish = "out"
-
-# Disable Netlify auto Next.js plugin
-[[plugins]]
-  package = ""
