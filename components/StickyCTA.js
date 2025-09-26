@@ -1,0 +1,3 @@
+export default function StickyCTA(){
+  return (<a href="tel:4804758721" className="floater" aria-label="Call SLW Painting">📞</a>)
+}
