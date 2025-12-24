@@ -1,1 +1,75 @@
-export default function Contact(){ return (<section id="contact" className="section section-alt"><div className="max-w-6xl mx-auto px-6"><h3 className="text-2xl font-bold mb-4">Get a Free Quote</h3><form name="quote" method="POST" data-netlify="true" className="max-w-xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4"><input type="hidden" name="form-name" value="quote" /><input name="name" placeholder="Name" className="p-3 border rounded" /><input name="email" placeholder="Email" className="p-3 border rounded" /><input name="phone" placeholder="Phone" className="p-3 border rounded" /><input name="address" placeholder="Project Address (optional)" className="p-3 border rounded" /><textarea name="message" placeholder="Tell us about the project" className="p-3 border rounded md:col-span-2"></textarea><button type="submit" className="btn btn-primary md:col-span-2">Request Quote</button></form><div className="mt-6 text-center"><p>Or call: <a href="tel:4804758721" className="text-blue-700 font-semibold">480‑475‑8721</a></p><p>Email: <a href="mailto:slwpaintingllc@gmail.com" className="text-blue-700">slwpaintingllc@gmail.com</a></p></div></div></section>) }
+import { useState } from "react";
+
+export default function Contact() {
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData(e.target);
+
+    const response = await fetch(
+      "https://formspree.io/f/xnjayrnl",
+      {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      setSubmitted(true);
+      e.target.reset();
+    } else {
+      alert("Something went wrong. Please try again.");
+    }
+
+    setLoading(false);
+  }
+
+  return (
+    <section id="contact">
+      {!submitted ? (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            required
+          />
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            required
+          />
+
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone Number"
+          />
+
+          <textarea
+            name="message"
+            placeholder="Tell us about your project"
+            required
+          />
+
+          <button type="submit" disabled={loading}>
+            {loading ? "Sending..." : "Request Quote"}
+          </button>
+        </form>
+      ) : (
+        <p style={{ color: "green", fontWeight: "bold" }}>
+          Our team will reach out soon
+        </p>
+      )}
+    </section>
+  );
+}
